@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 //        exampleThread.start();
 
         //////////////Solution 2//////////////////
-        ExampleRunnable exampleRunnable = new ExampleRunnable(5);
+        ExampleRunnable exampleRunnable = new ExampleRunnable(6);
         new Thread(exampleRunnable).start();
     }
 
@@ -67,13 +68,23 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             for (int i = 0; i < seconds; i++){
-                if (i == 4 ){
+                if (i == 2 ){
                     myHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             startButton.setText("hello");
                         }
                     });
+                }
+                else if(i == 5){//***
+                    Handler threadHandler = new Handler(Looper.getMainLooper());
+                    threadHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            startButton.setText("start");
+                        }
+                    });
+
                 }
                 Log.d(TAG, "start: " + i);
 
@@ -87,4 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-
+//***
+// Another way to do it it's just creating a new Handler inside my new Thread(ExampleRunnable)
+//and getting main looper with the method ===> Looper.getMainLooper()
